@@ -128,29 +128,4 @@ public class RedesController {
 		}
 	}
 	
-	public void readIp(String process){
-		String ethernet = "";
-		try {
-			Process p = Runtime.getRuntime().exec(process);
-			InputStream fluxo = p.getInputStream();
-			InputStreamReader leitor = new InputStreamReader(fluxo);
-			BufferedReader buffer = new BufferedReader(leitor);
-			String linha = buffer.readLine();
-			while (linha!=null){
-				if(linha.contains("Ethernet")){
-					ethernet = linha;
-				}
-				if(linha.contains("IPv4")){
-					System.out.println(ethernet);
-				}
-				System.out.println(linha);
-				linha = buffer.readLine();
-			}
-			buffer.close();
-			leitor.close();
-			fluxo.close();
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
-		}
 }
