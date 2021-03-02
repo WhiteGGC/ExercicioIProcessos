@@ -38,8 +38,31 @@ public class RedesController {
 				e.printStackTrace();
 			}
 		}else if(so.contains("Linux")){
-			String processo = "ifconfig";
-			readIp(processo);
+			String ethernet = "";
+			try {
+				Process p = Runtime.getRuntime().exec("ifconfig");
+				InputStream fluxo = p.getInputStream();
+				InputStreamReader leitor = new InputStreamReader(fluxo);
+				BufferedReader buffer = new BufferedReader(leitor);
+				String linha = buffer.readLine();
+				while (linha!=null){
+					if(linha.contains("flags")){
+						String palavras[] = linha.split(" ");
+						ethernet = palavras[0];
+					}
+					if(linha.contains("inet ")){
+						ethernet = ethernet + "\n" + linha.substring(8, 23);
+						System.out.println(ethernet);
+						ethernet = "";
+					}
+					linha = buffer.readLine();
+				}
+				buffer.close();
+				leitor.close();
+				fluxo.close();
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
 		}
 	}
 	
@@ -54,7 +77,7 @@ public class RedesController {
 				while (linha!=null){
 					if(linha.contains("ms")){
 						if(linha.contains("dia")){
-							System.out.print("Tempo médio:");
+							System.out.print("Tempo medio:");
 							System.out.print(linha.substring(41));
 						}else{
 						String palavras[] = linha.split(" ");
@@ -83,8 +106,8 @@ public class RedesController {
 				while (linha!=null){
 					if(linha.contains("ms")){
 						if(linha.contains("avg")){
-							System.out.print("Tempo médio:");
-							System.out.print(linha.substring(30, 37));
+							System.out.print("Tempo medio:");
+							System.out.print(linha.substring(30, 36));
 						}else{
 						String palavras[] = linha.split(" ");
 						for (String palavra : palavras){
